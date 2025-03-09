@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-customer-table" author="YHev">
+        <createTable tableName="CUSTOMER">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_name" type="varchar(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="email" type="varchar(50)" >
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="load-customer-data" author="YHev">
+        <loadData separator=";" tableName="CUSTOMER" file="customer.csv"
+                  relativeToChangelogFile="true"/>
+    </changeSet>
+    <changeSet id="create-account-table" author="YHev">
+        <createTable tableName="ACCOUNT">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="account_number" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance" type="numeric(10,2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="load-account-data" author="YHev">
+        <loadData separator=";" tableName="ACCOUNT" file="account.csv"
+                  relativeToChangelogFile="true"/>
+    </changeSet>
+    <changeSet id="create-customer-account-table" author="YHev">
+        <createTable tableName="CUSTOMER_ACCOUNT">
+            <column name="customer_id" type="bigint" >
+                <constraints referencedTableName="CUSTOMER" referencedColumnNames="id"
+                             nullable="false" foreignKeyName="CustomerAccountCustomerFk"/>
+            </column>
+            <column name="account_id" type="bigint" >
+                <constraints referencedTableName="ACCOUNT" referencedColumnNames="id"
+                             nullable="false" foreignKeyName="CustomerAccountAccountFk"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="load-customer-account-data" author="YHev">
+        <loadData separator=";" tableName="CUSTOMER_ACCOUNT"  file="customer-account.csv"
+                  relativeToChangelogFile="true"/>
+    </changeSet>
+    <changeSet id="create-transaction-table" author="YHev">
+        <createTable tableName="TRANSACTION">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="amount" type="numeric(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="load-transaction-data" author="YHev">
+        <loadData separator=";" tableName="TRANSACTION" file="transaction.csv"
+                  relativeToChangelogFile="true"/>
+    </changeSet>
+    <changeSet id="create-transaction-account-table" author="YHev">
+        <createTable tableName="TRANSACTION_ACCOUNT">
+            <column name="transaction_id" type="bigint">
+                <constraints referencedTableName="TRANSACTION" referencedColumnNames="id"
+                             nullable="false" foreignKeyName="TransactionAccountTransactionFk"/>
+            </column>
+            <column name="account_id" type="bigint">
+                <constraints referencedTableName="ACCOUNT" referencedColumnNames="id"
+                             nullable="false" foreignKeyName="TransactionToAccountAccountFk"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="load-transaction-account-data" author="YHev">
+        <loadData separator=";" tableName="TRANSACTION_ACCOUNT"  file="transaction-account.csv"
+                  relativeToChangelogFile="true"/>
+    </changeSet>
+    <changeSet id="create-loan-table" author="YHev">
+        <createTable tableName="LOAN">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="loanAmount" type="numeric(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="interestRate" type="numeric(5,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="load-loan-data" author="YHev">
+        <loadData separator=";" tableName="LOAN" file="loan.csv"
+                  relativeToChangelogFile="true"/>
+    </changeSet>
+    <changeSet id="create-loan-customer-table" author="YHev">
+        <createTable tableName="LOAN_CUSTOMER">
+            <column name="loan_id" type="bigint">
+                <constraints referencedTableName="LOAN" referencedColumnNames="id"
+                             nullable="false" foreignKeyName="LoanCustomerLoanFk"/>
+            </column>
+            <column name="customer_id" type="bigint">
+                <constraints referencedTableName="CUSTOMER" referencedColumnNames="id"
+                             nullable="false" foreignKeyName="LoanCustomerCustomerFk"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="load-loan-customer-data" author="YHev">
+        <loadData separator=";" tableName="LOAN_CUSTOMER"  file="loan-customer.csv"
+                  relativeToChangelogFile="true"/>
+    </changeSet>
+</databaseChangeLog>
